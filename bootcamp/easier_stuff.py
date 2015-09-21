@@ -69,6 +69,12 @@ def gene_name(gene):
 # across all of the experiments.
 # e.g. gene_data('YGR188C') returns [-0.09, 0.2, -0.07, ... ]
 def gene_data(gene):
+    txt=open("data/experiment_data.txt")
+    for line in txt:
+        if line.startswith(gene):
+	    gene_nums = line.split()
+	    del gene_num[0]
+    print num
     pass
 
 
