@@ -75,13 +75,18 @@ def gene_data(gene):
 	    gene_nums = line.split()
 	    del gene_num[0]
     return gene_num
-    pass
 
 
 # map from a systematic name to some info about the gene (whatever you want),
 # e.g  'YGR188C' -> 'Protein kinase involved in the cell cycle checkpoint into anaphase'
 def gene_info(gene):
-    pass
+    txt = open("data/gene_info.txt")
+    for line in txt:
+        if line.startswith(gene):
+	    info = line.split()
+	    del info[0:1]
+	    information = " ".join(info)
+    return information
 
 
 # map from a systematic name to a list of GOIDs that the gene is associated with
