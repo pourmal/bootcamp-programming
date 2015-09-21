@@ -48,8 +48,22 @@ def experiment():
 # map from a gene's systematic name to its standard name
 # e.g. gene_name('YGR188C') returns 'BUB1'
 def gene_name(gene):
-    pass
+  #read in files from gene_info
+  file_name = '/Users/student/Programming/bootcamp-programming/bootcamp/data/gene_info.txt'
+  fh = open(file_name, 'r')
 
+  gene_dict = {}
+
+  for line in fh:
+    if line[0] == 'Y':
+      temp = line.split()
+      sys_name = temp[0]
+      gene_name = temp[1]
+      # create dictionary where key = systematic name and value = gene name
+      gene_dict[sys_name] = gene_name
+
+  return gene_dict[gene]
+  pass
 
 # map from a gene's systematic name to a list of the values for that gene,
 # across all of the experiments.
