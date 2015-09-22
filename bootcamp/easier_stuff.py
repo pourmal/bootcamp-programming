@@ -41,8 +41,24 @@ EXPERIMENT_FILE = os.path.join(app.root_path, 'data', 'experiment_data.txt')
 # e.g. [[('YAL001C', -0.06), ('YAL002W', -0.3), ('YAL003W', -0.07), ... ],
 #       [('YAL001C', -0.58), ('YAL002W', 0.23), ('YAL003W', -0.25), ... ],
 #        ... ]
+
 def experiment():
-    pass
+    return experiment(EXPERIMENT_FILE)
+
+
+def experiment(exp_file):
+    experiments = {}
+
+    with open(exp_file, 'r') as f:
+        for line in f.readlines()[1:]:
+            fields = line.split('\t')
+
+            for exp_index in range(0, len(fields) - 1):
+                if exp_index not in experiments:
+                    experiments[exp_index] = []
+                experiments[exp_index].append((fields[0], float(fields[exp_index + 1])))
+
+    return experiments
 
 
 # map from a gene's systematic name to its standard name
