@@ -14,7 +14,7 @@
 # (don't delete this but don't worry about it either)
 import os # a built-in module, for dealing with filenames
 from . import app # this is part of the website guts
-
+from collections import defaultdict
 
 
 # These are all the files you have to work with. Go open them in a text editor so you can
@@ -136,4 +136,25 @@ def go_info(goid):
 # to a list of genes (systematic names)
 # e.g. 'GO:0005737' -> ['YAL001C', 'YAL002W', 'YAL003W', ... ]
 def go_to_gene(goid):
+    go_to_gene = defaultdict(list)
+    genes = []
+
+    # read in files from go_membership.txt
+    file_name = '/Users/student/Programming/bootcamp-programming/bootcamp/data/go_membership.txt'
+    fh = open(file_name, 'r')
+
+    # create dictionary where key = systematic name and value = GO ID
+    for line in fh:
+      if line[0] == 'Y':
+        temp = line.split()
+        sys_name = temp[0]
+        goid = temp[1]
+
+        gene = (goid, sys_name)
+        genes.append(gene)
+    fh.close()
+
+    for goid, sys_name in genes:
+      go_to_gene[goid].append[sys_name]
+    
     pass
