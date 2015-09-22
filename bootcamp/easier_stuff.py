@@ -54,13 +54,15 @@ def gene_name(gene):
 
   gene_dict = {}
 
+  # create dictionary where key = systematic name and value = gene name
+  # eventually we can just import this, instead of creating a dictionary every time the function is called
   for line in fh:
     if line[0] == 'Y':
       temp = line.split()
       sys_name = temp[0]
       gene_name = temp[1]
-      # create dictionary where key = systematic name and value = gene name
       gene_dict[sys_name] = gene_name
+  fh.close()
 
   return gene_dict[gene]
   pass
@@ -87,6 +89,28 @@ def gene_info(gene):
 # map from a systematic name to a list of GOIDs that the gene is associated with
 # e.g. 'YGR188C' -> ['GO:0005694', 'GO:0000775', 'GO:0000778', ... ]
 def gene_to_go(gene):
+    gene_to_go = defaultdict(list)
+    genes = []
+
+    # read in files from go_membership.txt
+    file_name = '/Users/student/Programming/bootcamp-programming/bootcamp/data/go_membership.txt'
+    fh = open(file_name, 'r')
+
+    # create dictionary where key = systematic name and value = GO ID
+    for line in fh:
+      if line[0] == 'Y':
+        temp = line.split()
+        sys_name = temp[0]
+        goid = temp[1]
+
+        gene = (sys_name, goid)
+        genes.append(gene)
+    fh.close()
+
+    for sys_name, goid in genes:
+      gene_to_go[sys_name].append(goid)
+    
+    return gene_to_go[gene]
     pass
 
 
