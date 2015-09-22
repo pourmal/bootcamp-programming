@@ -14,7 +14,7 @@
 # (don't delete this but don't worry about it either)
 import os # a built-in module, for dealing with filenames
 from . import app # this is part of the website guts
-
+from collections import defaultdict
 
 
 # These are all the files you have to work with. Go open them in a text editor so you can
@@ -64,25 +64,74 @@ def experiment(exp_file):
 # map from a gene's systematic name to its standard name
 # e.g. gene_name('YGR188C') returns 'BUB1'
 def gene_name(gene):
-    pass
+  #read in files from gene_info
+  file_name = '/Users/student/Programming/bootcamp-programming/bootcamp/data/gene_info.txt'
+  fh = open(file_name, 'r')
 
+  gene_dict = {}
+
+  # create dictionary where key = systematic name and value = gene name
+  # eventually we can just import this, instead of creating a dictionary every time the function is called
+  for line in fh:
+    if line[0] == 'Y':
+      temp = line.split()
+      sys_name = temp[0]
+      gene_name = temp[1]
+      gene_dict[sys_name] = gene_name
+  fh.close()
+
+  return gene_dict[gene]
+  pass
 
 # map from a gene's systematic name to a list of the values for that gene,
 # across all of the experiments.
 # e.g. gene_data('YGR188C') returns [-0.09, 0.2, -0.07, ... ]
 def gene_data(gene):
-    pass
+    txt = open("data/experiment_data.txt")
+    for line in txt:
+        if line.startswith(gene):
+	    gene_nums = line.split()
+	    del gene_num[0]
+    return gene_num
 
 
 # map from a systematic name to some info about the gene (whatever you want),
 # e.g  'YGR188C' -> 'Protein kinase involved in the cell cycle checkpoint into anaphase'
 def gene_info(gene):
-    pass
+    txt = open("data/gene_info.txt")
+    for line in txt:
+        if line.startswith(gene):
+	    info = line.split()
+	    del info[0:1]
+	    information = " ".join(info)
+    return information
 
 
 # map from a systematic name to a list of GOIDs that the gene is associated with
 # e.g. 'YGR188C' -> ['GO:0005694', 'GO:0000775', 'GO:0000778', ... ]
 def gene_to_go(gene):
+    gene_to_go = defaultdict(list)
+    genes = []
+
+    # read in files from go_membership.txt
+    file_name = '/Users/student/Programming/bootcamp-programming/bootcamp/data/go_membership.txt'
+    fh = open(file_name, 'r')
+
+    # create dictionary where key = systematic name and value = GO ID
+    for line in fh:
+      if line[0] == 'Y':
+        temp = line.split()
+        sys_name = temp[0]
+        goid = temp[1]
+
+        gene = (sys_name, goid)
+        genes.append(gene)
+    fh.close()
+
+    for sys_name, goid in genes:
+      gene_to_go[sys_name].append(goid)
+    
+    return gene_to_go[gene]
     pass
 
 
@@ -90,12 +139,47 @@ def gene_to_go(gene):
 # to a list of all the GOIDs in that aspect
 # e.g. 'C' -> ['GO:0005737', 'GO:0005761', 'GO:0005763', ... ]
 def go_aspect(aspect):
+    txt = 'data/go_info.txt'
+    fh = open(txt, 'r')
+
+    aspect_dict = defaultdict(list)
+
+    for line in fh:
+	temp = line.split('\t')
+	if "C" in temp:
+            aspect_dict['C'].append(temp[0])
+	elif "F" in temp:
+	    aspect_dict['F'].append(temp[0])
+	elif "P" in temp:
+	    aspect_dict['P'].append(temp[0])
+	fh.close()
+
+    return aspect_dict[aspect]
     pass
 
 
 # map from a GOID (e.g. GO:0005737) to a *tuple* of the term, aspect, and term definition
 # e.g. 'GO:0005737' -> ('cytoplasm', 'C', 'All of the contents of a cell... (etc)'
 def go_info(goid):
+    go_info = {}
+
+    # read in files from go_info.txt
+    file_name = '/Users/student/Programming/bootcamp-programming/bootcamp/data/go_info.txt'
+    fh = open(file_name, 'r')
+
+    for line in fh:
+      if line[0] == 'G':
+        temp = line.split('\t')
+        goid = temp[0]
+        go_term = temp[1]
+        go_aspect = temp[2]
+        go_def = temp[3]
+
+        go_unit = [go_term, go_aspect, go_def]
+        go_info[goid] = go_unit
+    fh.close()
+
+    return go_info[goid]
     pass
 
 
@@ -103,4 +187,26 @@ def go_info(goid):
 # to a list of genes (systematic names)
 # e.g. 'GO:0005737' -> ['YAL001C', 'YAL002W', 'YAL003W', ... ]
 def go_to_gene(goid):
+    go_to_gene = defaultdict(list)
+    genes = []
+
+    # read in files from go_membership.txt
+    file_name = '/Users/student/Programming/bootcamp-programming/bootcamp/data/go_membership.txt'
+    fh = open(file_name, 'r')
+
+    # create dictionary where key = systematic name and value = GO ID
+    for line in fh:
+      if line[0] == 'Y':
+        temp = line.split()
+        sys_name = temp[0]
+        goid = temp[1]
+
+        gene = (goid, sys_name)
+        genes.append(gene)
+    fh.close()
+
+    for goid, sys_name in genes:
+      go_to_gene[goid].append[sys_name]
+     
+    return go_to_gene[goid]    
     pass
