@@ -156,5 +156,6 @@ def go_to_gene(goid):
 
     for goid, sys_name in genes:
       go_to_gene[goid].append[sys_name]
-    
+     
+    return go_to_gene[goid]    
     pass
