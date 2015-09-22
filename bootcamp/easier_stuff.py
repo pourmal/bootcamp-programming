@@ -129,6 +129,25 @@ def go_aspect(aspect):
 # map from a GOID (e.g. GO:0005737) to a *tuple* of the term, aspect, and term definition
 # e.g. 'GO:0005737' -> ('cytoplasm', 'C', 'All of the contents of a cell... (etc)'
 def go_info(goid):
+    go_info = {}
+
+    # read in files from go_info.txt
+    file_name = '/Users/student/Programming/bootcamp-programming/bootcamp/data/go_info.txt'
+    fh = open(file_name, 'r')
+
+    for line in fh:
+      if line[0] == 'G':
+        temp = line.split('\t')
+        goid = temp[0]
+        go_term = temp[1]
+        go_aspect = temp[2]
+        go_def = temp[3]
+
+        go_unit = [go_term, go_aspect, go_def]
+        go_info[goid] = go_unit
+    fh.close()
+
+    return go_info[goid]
     pass
 
 
