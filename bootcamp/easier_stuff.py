@@ -123,6 +123,22 @@ def gene_to_go(gene):
 # to a list of all the GOIDs in that aspect
 # e.g. 'C' -> ['GO:0005737', 'GO:0005761', 'GO:0005763', ... ]
 def go_aspect(aspect):
+    txt = 'data/go_info.txt'
+    fh = open(txt, 'r')
+
+    aspect_dict = defaultdict(list)
+
+    for line in fh:
+	temp = line.split('\t')
+	if "C" in temp:
+            aspect_dict['C'].append(temp[0])
+	elif "F" in temp:
+	    aspect_dict['F'].append(temp[0])
+	elif "P" in temp:
+	    aspect_dict['P'].append(temp[0])
+	fh.close()
+
+    return aspect_dict[aspect]
     pass
 
 
